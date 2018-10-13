@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,10 +49,20 @@ public class ListOfPosts extends AppCompatActivity implements LoaderManager.Load
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_of_posts);
 
-        String userName = getIntent().getStringExtra("userName");
+        final String userName = getIntent().getStringExtra("userName");
 
         TextView userNameTextView = (TextView) findViewById(R.id.user_name_text_view);
         userNameTextView.setText(userName);
+
+        // Setting FAB to open EditorActivity
+        FloatingActionButton fabChooseNewUser = (FloatingActionButton) findViewById(R.id.fab_search);
+        fabChooseNewUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListOfPosts.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Find a reference to the {@link ListView} in the layout
         ListView postsListView = (ListView) findViewById(R.id.list);
@@ -100,6 +112,12 @@ public class ListOfPosts extends AppCompatActivity implements LoaderManager.Load
             emptyPage.setImageResource(R.drawable.no_connection);
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        return;
     }
 
 

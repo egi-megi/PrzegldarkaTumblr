@@ -15,6 +15,9 @@
 
     <string name="choosing_new_user_menu_item">Choosing new user</string>
 
+    <string name="select_usernames">Recently selected usernames:</string>
+
+
 
 
 </resources>

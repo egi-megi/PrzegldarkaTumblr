@@ -1,14 +1,52 @@
 package com.example.android.przegldarkatumblr;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
+    public ArrayList<String> listUsernames = new ArrayList<String>();
+
+
+    public void setActuallyUsername(String username) {
+        listUsernames.add(username);
+        getPreferences(Context.MODE_PRIVATE).edit().putStringSet("la",new HashSet<String>(listUsernames)).commit();
+    }
+
+    void openNewListOfPosts(String username) {
+        setActuallyUsername(username);
+        Intent listOfPostIntent = new Intent(MainActivity.this, ListOfPosts.class);
+        listOfPostIntent.putExtra("userName", username);
+        startActivity(listOfPostIntent);
+    }
+
+    public Button makeButton(final String text) {
+        Button button = new Button(this);
+        button.setText(text);
+        button.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        button.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNewListOfPosts(text);
+            }
+        });
+        return button;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +67,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String writeUserName = searchUserEditText.getText().toString();
-                Post p = new Post(writeUserName);
-                    Intent listOfPostIntent = new Intent(MainActivity.this, ListOfPosts.class);
-                    listOfPostIntent.putExtra("userName", p.getUserName());
-                    startActivity(listOfPostIntent);
-                    return; // Here the method is breaking
+                openNewListOfPosts(writeUserName);
+                return;
             }
         });
+
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Set<String> stringSet=getPreferences(Context.MODE_PRIVATE).getStringSet("la",new HashSet<String>());
+        if (listUsernames.isEmpty()){
+            listUsernames.addAll(stringSet);
+        }
+        LinearLayout myRoot = (LinearLayout) findViewById(R.id.lastSelectedUsernames);
+        for (String s : listUsernames) {
+            myRoot.addView(makeButton(s));
+        }
+
+    }
+
 
 
 }
