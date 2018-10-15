@@ -77,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String writeUserName = searchUserEditText.getText().toString();
 
-                openNewListOfPosts(writeUserName);
+                if (writeUserName != null && !writeUserName.isEmpty()) {
+                    openNewListOfPosts(writeUserName);
+                }
+
                 return;
             }
         });
