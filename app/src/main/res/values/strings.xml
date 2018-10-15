@@ -1,23 +1,16 @@
 <resources>
-    <string name="app_name">Przeglądarka Tumbir</string>
-
-    <string name="no_connection">No internet connection.</string>
-    <string name="no_posts">No posts found.</string>
+    <string name="app_name">Tumblr Viewer</string>
 
     <string name="section_name">section name</string>
     <string name="title">title</string>
     <string name="date">date</string>
+    <string name="description">description</string>
     <string name="likes">Likes: </string>
-    <string name="author">author</string>
 
     <string name="user_for_example">teacoffeebooks</string>
-
 
     <string name="choosing_new_user_menu_item">Choosing new user</string>
 
     <string name="select_usernames">Recently selected usernames:</string>
-
-
-
 
 </resources>

@@ -1,19 +1,15 @@
 package com.example.android.przegldarkatumblr;
 
+import android.content.Context;
 import android.text.Spanned;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by egi-megi on 10.10.18.
  */
 
-public class Post {
-    private  String mUserName;
-
-    private  String mPostId;
-
-    private String mSlugTitle;
-
-    private Spanned mDescrition;
+public abstract class Post {
 
     private String mPublicationDate;
 
@@ -21,40 +17,14 @@ public class Post {
 
     private String mNumberOfNotes;
 
-    private int mImage;
-
-    private String mKeyWord;
-
     public Post() { }
 
-    public Post(String userName) {
-        mUserName = userName;
-    }
-
-    public Post(String postId, String slugTitle, Spanned description, String publicationDate, String webUrl, String numberOfNotes) {
-        mPostId = postId;
-        mSlugTitle = slugTitle;
-        mDescrition = description;
+    public Post(String publicationDate, String webUrl, String numberOfNotes) {
         mPublicationDate = publicationDate;
         mWebUrl = webUrl;
         mNumberOfNotes = numberOfNotes;
     }
 
-    public String getUserName() {
-        return mUserName;
-    }
-
-    public String getPostId() {
-        return mPostId;
-    }
-
-    public String getSlugTitle() {
-        return mSlugTitle;
-    }
-
-    public Spanned getDescrition() {
-        return mDescrition;
-    }
 
     public String getPublicationDate() {
         return mPublicationDate;
@@ -67,4 +37,7 @@ public class Post {
     public String getNumberOfNotes() {
         return mNumberOfNotes;
     }
+
+    public abstract View displayPost(View listItemView, final Context ctx, ViewGroup parent, int position);
+
 }

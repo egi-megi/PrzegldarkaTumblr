@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_empty_page">20sp</dimen>
-    <dimen name="text_section_name_title_article">15sp</dimen>
-    <dimen name="text_date">12sp</dimen>
-    <dimen name="text_author">14sp</dimen>
+    <dimen name="text_likes">15sp</dimen>
+    <dimen name="text_date">15sp</dimen>
+    <dimen name="text_username">22sp</dimen>
+    <dimen name="text_caption">14sp</dimen>
+    <dimen name="text_description">16sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_button">10sp</dimen>
+    <dimen name="text_selected_username">18sp</dimen>
 
-    <dimen name="padding_main">16dp</dimen>
+    <dimen name="padding_main">20dp</dimen>
     <dimen name="padding_top">8dp</dimen>
-    <dimen name="padding_between_title_author">2dp</dimen>
+    <dimen name="padding_top_username">10dp</dimen>
+    <dimen name="padding_bottom_username">12dp</dimen>
     <dimen name="list_item_height">250dp</dimen>
+    <dimen name="padding_for_description">8dp</dimen>
+    <dimen name="padding_button_last_usernames">45dp</dimen>
+    <dimen name="padding_after_likes">5dp</dimen>
+    <dimen name="margin_for_floating_action_button">10dp</dimen>
+    <dimen name="hight_for_search_place">50dp</dimen>
+
+
+    <dimen name="margin_between_lines">2dp</dimen>
+    <dimen name="thickness_line">2dp</dimen>
 
 </resources>

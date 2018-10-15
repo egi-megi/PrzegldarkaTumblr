@@ -4,17 +4,12 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -33,13 +28,8 @@ public class ListOfPosts extends AppCompatActivity implements LoaderManager.Load
     // Constant value for the post loader ID
     private static final int POST_LOADER_ID = 1;
 
-    public static final String USGS_REQUEST_URL =
-            "https://userName.tumblr.com/api/read/json?type=text";
-//            "https://content.guardianapis.com/search?q=architecture&from-date=2017-01-01&api-key=21bb4e65-d7b8-4e81-ae28-632e388ed476&show-tags=contributor";
+    public String USGS_REQUEST_URL;
 
-    /**
-     * Adapter for the list of posts
-     */
     private PostAdapter mAdapter;
 
     public ImageView emptyPage;
@@ -49,12 +39,13 @@ public class ListOfPosts extends AppCompatActivity implements LoaderManager.Load
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_of_posts);
 
+        //Get URL with getted username
         final String userName = getIntent().getStringExtra("userName");
-
+        USGS_REQUEST_URL = "https://" + userName + ".tumblr.com/api/read/json?";
         TextView userNameTextView = (TextView) findViewById(R.id.user_name_text_view);
         userNameTextView.setText(userName);
 
-        // Setting FAB to open EditorActivity
+        // Setting FAB to open MainActivity with searching new username
         FloatingActionButton fabChooseNewUser = (FloatingActionButton) findViewById(R.id.fab_search);
         fabChooseNewUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,12 +55,12 @@ public class ListOfPosts extends AppCompatActivity implements LoaderManager.Load
             }
         });
 
-        // Find a reference to the {@link ListView} in the layout
+
         ListView postsListView = (ListView) findViewById(R.id.list);
 
         // Find a reference to the Image View in empty page in the layout
-        emptyPage = (ImageView) findViewById(R.id.empty_text_view);
-        postsListView.setEmptyView(findViewById(R.id.empty_text_view));
+        emptyPage = (ImageView) findViewById(R.id.empty_image_view);
+        postsListView.setEmptyView(findViewById(R.id.empty_image_view));
 
         // Create a new {@link ArrayAdapter} of posts
         mAdapter = new PostAdapter(this, new ArrayList<Post>());
@@ -98,6 +89,7 @@ public class ListOfPosts extends AppCompatActivity implements LoaderManager.Load
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        // Make suitable page when there is no connetion with Internet
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         if (activeNetwork != null && activeNetwork.isConnected()) {
@@ -124,11 +116,11 @@ public class ListOfPosts extends AppCompatActivity implements LoaderManager.Load
     @Override
     public Loader<List<Post>> onCreateLoader(int i, Bundle bundle) {
 
-
         // Create a new loader for the given URL
-        return new PostLoader(this, null);//USGS_REQUEST_URL);
+        return new PostLoader(this, USGS_REQUEST_URL);
     }
 
+    // Create suitable page when there is no posts (for example when in the Tumblr there is no user with written username)
     @Override
     public void onLoadFinished(Loader<List<Post>> loader, List<Post> posts) {
 
@@ -151,8 +143,6 @@ public class ListOfPosts extends AppCompatActivity implements LoaderManager.Load
     public void onLoaderReset(Loader<List<Post>> loader) {
         mAdapter.clear();
     }
-
-
 
 
 }

@@ -30,20 +30,20 @@ public class PostLoader extends AsyncTaskLoader<List<Post>> {
     public List<Post> loadInBackground() {
         if (mUrl == null) {
 
-                try {
-                    List<Post> posts = QueryUtilis.fetchPostData(getContext().getAssets().open("test.json"));
-                    // Update the information displayed to the user.
-                    return posts;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                List<Post> posts = QueryUtilis.fetchPostData(getContext().getAssets().open("test.json"));
+                // Update the information displayed to the user.
+                return posts;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             return null;
         }
         // Create URL object
         // Perform the HTTP request for post data and process the response.
         List<Post> posts = QueryUtilis.fetchPostData(mUrl);
-        // Update the information displayed to the user.
+
         return posts;
     }
 }

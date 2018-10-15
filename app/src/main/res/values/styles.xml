@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Style for horizontal lines-->
+    <style name="Line_horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/thickness_line</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+
 </resources>

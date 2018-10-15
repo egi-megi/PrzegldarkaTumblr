@@ -27,18 +27,18 @@ import java.util.List;
  */
 
 public class QueryUtilis {
-    /**
-     * Tag for the log messages
-     */
+
     public static final String LOG_TAG = QueryUtilis.class.getSimpleName();
 
     private QueryUtilis() {
     }
 
+    static final int LOAD_POST_AT_ONCE = 50;
+
     public static List<Post> fetchPostData(String requestUrl) {
 
         // Create URL object
-        URL url = createUrl(requestUrl);
+        URL url = createUrl(requestUrl + "num=" + LOAD_POST_AT_ONCE);
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
@@ -47,16 +47,36 @@ public class QueryUtilis {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error closing input stream", e);
         }
-
-        // Extract relevant fields from the JSON response and create an {@link Post} object
         List<Post> posts = extractFeatureFromJson(jsonResponse);
+        List<Post> lastposts = posts;
 
+        int j = LOAD_POST_AT_ONCE;
+
+        // Download more than 20 posts, but not more than 200
+        while (lastposts != null && lastposts.size() > 0 && j < 200) {
+
+            System.out.println(requestUrl + "start=" + j + "&num=" + LOAD_POST_AT_ONCE);
+
+            url = createUrl(requestUrl + "start=" + j + "&num=" + LOAD_POST_AT_ONCE);
+
+            // Perform HTTP request to the URL and receive a JSON response back
+            jsonResponse = null;
+            try {
+                jsonResponse = makeHttpRequest(url);
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "Error closing input stream", e);
+            }
+            lastposts = extractFeatureFromJson(jsonResponse);
+            posts.addAll(lastposts);
+
+            j = j + LOAD_POST_AT_ONCE;
+
+        }
         // Return the list of {@link Post} objects
         return posts;
     }
 
     public static List<Post> fetchPostData(InputStream stream) {
-
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
@@ -90,6 +110,7 @@ public class QueryUtilis {
      * Make an HTTP request to the given URL and return a String as the response.
      */
     private static String makeHttpRequest(URL url) throws IOException {
+
         String jsonResponse = "";
 
         // If the URL is null, then return early.
@@ -102,8 +123,8 @@ public class QueryUtilis {
         try {
             System.setProperty("http.agent", "curl/7.47.0");
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("User-Agent","curl/7.47.0");
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
+            urlConnection.setRequestProperty("User-Agent", "curl/7.47.0");
+            urlConnection.setReadTimeout(50000 /* milliseconds */);
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -158,6 +179,7 @@ public class QueryUtilis {
             return null;
         }
 
+        // Delete strange text which is on the beggining of each JSON document
         if (postJSON.startsWith("var tumblr_api_read = ")) {
             postJSON = postJSON.substring(22);
         }
@@ -172,36 +194,35 @@ public class QueryUtilis {
             JSONObject jsonObj = new JSONObject(postJSON);
 
             // Getting JSON Array node
-//            JSONObject tumblr = jsonObj.getJSONObject("tumblelog");
-//            String userName = tumblr.getString("name");
-
             JSONArray postsJSON = jsonObj.getJSONArray("posts");
 
-            // looping through All Contacts
+            // looping through all Posts
             for (int i = 0; i < postsJSON.length(); i++) {
                 JSONObject ps = postsJSON.getJSONObject(i);
-                String postId = ps.getString("id");
+                String type = ps.getString("type");
+                String publicationDate = ps.getString("date");
                 String numberOfNotes = ps.getString("note-count");
-                String publicationDate = ps.getString("date-gmt");
                 String webUrl = ps.getString("url");
-                String slugTitle = ps.getString("slug");
-                String description = ps.getString("regular-body");
-                Spanned descriptionSpanned = Html.fromHtml(description);
-//                JSONArray contributors = ps.getJSONArray("tags");
-//                StringBuilder sb = new StringBuilder();
-//
-//                for (int j = 0; j < contributors.length(); j++) {
-//                    if (j != 0) sb.append(", ");
-//
-//                    sb.append(contributors.getJSONObject(j).getString("webTitle"));
-//                }
-//
-//                String authorsString = sb.toString();
 
-                Post post = new Post(postId, slugTitle, descriptionSpanned, publicationDate, webUrl, numberOfNotes);
+                if (type.equalsIgnoreCase("regular")) {
+                    String description = ps.getString("regular-body");
+                    Spanned descriptionSpanned = Html.fromHtml(description);
+                    String title = ps.getString("regular-title");
 
-                // Adding contact to contact list
-                posts.add(post);
+                    Post post = new Text(title, descriptionSpanned, publicationDate, webUrl, numberOfNotes);
+                    posts.add(post);
+
+                } else if (type.equalsIgnoreCase("photo")) {
+                    String image = ps.getString("photo-url-400");
+                    String caption = ps.getString("photo-caption");
+                    Spanned captionSpanned = Html.fromHtml(caption);
+
+                    Post post = new Photo(image, captionSpanned, publicationDate, webUrl, numberOfNotes);
+
+                    posts.add(post);
+
+                }
+
             }
         } catch (JSONException e) {
             Log.e("QueryUtilis", "Problem parsing the post JSON results", e);
