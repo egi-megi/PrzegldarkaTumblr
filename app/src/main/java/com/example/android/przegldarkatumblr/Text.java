@@ -64,7 +64,13 @@ public class Text extends Post {
         }
 
         TextView descriptionTextView = (TextView) listItemView.findViewById(R.id.description_text_view);
-        descriptionTextView.setText(this.getDescription());
+        if (this.getDescription() == null) {
+            descriptionTextView.setVisibility(View.GONE);
+        } else {
+            descriptionTextView.setVisibility(View.VISIBLE);
+            descriptionTextView.setText(this.getDescription());
+        }
+
 
         TextView numberOfNotesTextView = (TextView) listItemView.findViewById(R.id.number_of_likes_text_view);
         numberOfNotesTextView.setText(getNumberOfNotes());

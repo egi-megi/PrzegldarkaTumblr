@@ -7,7 +7,7 @@
     <dimen name="text_caption">14sp</dimen>
     <dimen name="text_description">16sp</dimen>
     <dimen name="text_title">18sp</dimen>
-    <dimen name="text_button">10sp</dimen>
+    <dimen name="text_button">8sp</dimen>
     <dimen name="text_selected_username">18sp</dimen>
 
     <dimen name="padding_main">20dp</dimen>

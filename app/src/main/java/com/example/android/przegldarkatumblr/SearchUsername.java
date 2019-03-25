@@ -9,15 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class SearchUsername extends AppCompatActivity {
 
     public ArrayList<String> listUsernames = new ArrayList<String>();
 
@@ -38,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     void openNewListOfPosts(String username) {
         setActuallyUsername(username);
-        Intent listOfPostIntent = new Intent(MainActivity.this, ListOfPosts.class);
+        Intent listOfPostIntent = new Intent(SearchUsername.this, ListOfPosts.class);
         listOfPostIntent.putExtra("userName", username);
         startActivity(listOfPostIntent);
     }

@@ -45,12 +45,12 @@ public class ListOfPosts extends AppCompatActivity implements LoaderManager.Load
         TextView userNameTextView = (TextView) findViewById(R.id.user_name_text_view);
         userNameTextView.setText(userName);
 
-        // Setting FAB to open MainActivity with searching new username
+        // Setting FAB to open SearchUsername with searching new username
         FloatingActionButton fabChooseNewUser = (FloatingActionButton) findViewById(R.id.fab_search);
         fabChooseNewUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ListOfPosts.this, MainActivity.class);
+                Intent intent = new Intent(ListOfPosts.this, SearchUsername.class);
                 startActivity(intent);
             }
         });
